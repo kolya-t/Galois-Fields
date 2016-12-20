@@ -147,23 +147,6 @@ public class GF {
         return period;
     }
 
-//    public int[] getPowTable() {
-//
-//        return powTable;
-//    }
-
-//    public int[] getLogTable() {
-//        return logTable;
-//    }
-
-//    public int[][] getMulTable() {
-//        return mulTable;
-//    }
-
-//    public int[][] getDivTable() {
-//        return divTable;
-//    }
-
     public int log(int pow) {
         return logTable[pow];
     }

@@ -22,18 +22,20 @@ public class Main {
 //        server.start();
 //        server.join();
 
-        String s = "e1 +e2+ (e0 +e3)*e2";
-        System.out.println(Arrays.toString(Parser.parse(s)));
+        String src = "e1 +e2+ (e0 +e3)*e2";
+//        System.out.println(Arrays.toString(Parser.parse(s)));
+        GF gf = new GF(4, "10011");
+        RPN rpn = new RPN(gf);
+        System.out.println(String.join(" ", RPN.parse(src)) + " = e" + gf.log(rpn.calculate(src)));
     }
 
     public static void buildField(GF gf) {
-        int[] powTable = gf.getPowTable();
         for (int i = 0; i < gf.getPeriod(); i++) {
             System.out.printf("e^%-2d | %4s | %2d | %2d\n",
                     i,
-                    gf.toBinaryString(powTable[i]),
-                    gf.inverse(powTable[i]),
-                    powTable[i]);
+                    gf.toBinaryString(gf.pow(i)),
+                    gf.inverse(gf.pow(i)),
+                    gf.pow(i));
         }
     }
 }

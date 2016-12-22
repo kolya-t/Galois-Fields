@@ -2,6 +2,8 @@ import java.util.*;
 
 public class RPN {
 
+    /* TODO: сделать проверку на e > period и e < period */
+
     private GF gf;
 
     public RPN(GF gf) {

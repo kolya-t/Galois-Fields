@@ -14,13 +14,21 @@ body {
 div.wrapper {
     width: 50%;
     margin: auto;
-}
-
-form {
     border: 1px solid gray;
     border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 #polynimial, #formula {
     width: 90%;
+}
+
+table.els {
+    border-collapse: collapse;
+    text-align: center;
+}
+
+table.els td, table.els th {
+    border: 1px solid gray;
+    padding: 5px;
 }

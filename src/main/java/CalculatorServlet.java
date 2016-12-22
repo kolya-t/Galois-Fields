@@ -15,23 +15,58 @@ public class CalculatorServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (checkParameters(req.getParameterMap())) {
+        resp.setContentType("text/html;charset=utf-8");
+        // проверка параметров
+        if (!checkParameters(req.getParameterMap())) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             sendError(resp);
+            return;
         }
 
-        Map<String, Object> map = new HashMap<>();
-        map.putAll(req.getParameterMap());
-        String power = req.getParameter("power");
-        String polynomial = req.getParameter("polynomial");
-        String formula = req.getParameter("formula");
+        Map<String, Object> calculatedMap = calculate(req);
+        PageGenerator templater = PageGenerator.instance();
+        setSharedVariables(req, templater);
 
-        int pow = Integer.parseInt(power);
-//        GF gf = new GF(pow, polynomial);
-//        RPN rpn = new RPN(gf);
+        String json = new Gson().toJson(req.getParameterMap());
+        System.out.println(json);
+        resp.getWriter().println(json);
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        Gson gson = new Gson();
-        resp.getWriter().println(gson.toJson(map));
+        resp.getWriter().println(PageGenerator.instance().getPage("page.html", calculatedMap));
+    }
+
+    /**
+     * Выполнение расчета
+     * @param req
+     */
+    private Map<String, Object> calculate(HttpServletRequest req) {
+        Map<String, Object> map = new HashMap<>();
+
+        int power = Integer.parseInt(req.getParameter("power"));
+        String polynom = req.getParameter("polynom");
+        String formula = req.getParameter("formula");
+        boolean table = false;
+        String table_first;
+        int table_count;
+        if (req.getParameter("table") != null) {
+            table = true;
+            table_first = req.getParameter("table_first");
+            table_count = Integer.parseInt(req.getParameter("table_count"));
+        }
+
+        GF gf = new GF(power, polynom);
+        RPN rpn = new RPN(gf);
+
+        return map;
+    }
+
+    private void setSharedVariables(HttpServletRequest req, PageGenerator templater) {
+        String table = req.getParameter("table");
+        if (table != null) {
+            templater.setSharedVariable("table", true);
+        } else {
+            return;
+        }
     }
 
     /**
@@ -58,11 +93,11 @@ public class CalculatorServlet extends HttpServlet {
                 throw new InvalidParameterException();
             }
 
-            String[] tableS = parameterMap.get("table");
-            if (tableS == null) {
+            ;
+            if (parameterMap.get("table") == null) {
                 return true;
             }
-            boolean table = tableS[0].equals("on");
+            boolean table = true;
 
             if (table) {
                 String table_first = parameterMap.get("table_first")[0];

@@ -4,10 +4,38 @@
     <meta charset="UTF-8">
     <title>Калькулятор полей Галуа</title>
     <link href="../public_html/styles.css" rel="stylesheet">
-    <!--<script language="JavaScript" src="scripts.js"></script>-->
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto"
+          rel="stylesheet">
 </head>
 <body>
-
+<div class="wrapper">
+    <div>
+        <h1>Поле Галуа GF(2<sup>${power}</sup>)</h1>
+        <b>Образующий полином: ${polynomial} = ${bi_polynomial}</b>
+        <hr>
+        <hr>
+        <b><i>Вычисление формулы:</i></b>
+        ${formula} = ${bi_result} = e<sup>${result}</sup>
+        <hr>
+        <#list elements>
+            <b><i>Элементы поля:</i></b>
+            <table class="els">
+                <tr>
+                    <th>Двоичное представление</th>
+                    <th>Степенное представление</th>
+                </tr>
+                <#items as element>
+                    <tr>
+                        <td>${element}</td>
+                        <td>e<sup>${element}</sup></td>
+                    </tr>
+                </#items>
+            </table>
+            <hr>
+            <!--<#else>-->
+            <!---->
+        </#list>
+    </div>
+</div>
 </body>
 </html>

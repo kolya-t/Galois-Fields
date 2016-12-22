@@ -1,0 +1,26 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12pt;
+    margin: 10px;
+}
+div.hidden {
+    overflow: hidden;
+}
+
+body {
+    background: lightblue;
+}
+
+div.wrapper {
+    width: 50%;
+    margin: auto;
+}
+
+form {
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+#polynimial, #formula {
+    width: 90%;
+}

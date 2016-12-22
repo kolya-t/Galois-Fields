@@ -1,12 +1,9 @@
-import com.google.gson.Gson;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -66,7 +63,7 @@ public class CalculatorServlet extends HttpServlet {
             table_count = Integer.parseInt(req.getParameter("table_count"));
 
             /* Добавление в словарь */
-            map.put("table", true); // если не будет работать то убрать
+//            map.put("tbl", true); // если не будет работать то убрать
 
             Map<String, Integer> elements = new LinkedHashMap<>();
             for (int i = table_first; i < gf.getFieldSize(); i++) {
@@ -76,24 +73,13 @@ public class CalculatorServlet extends HttpServlet {
                     break;
                 }
             }
-
-            setSharedVariables(true, elements, templater);
+            templater.setSharedVariable("elements", elements);
+            templater.setSharedVariable("table", true);
+        } else {
+            templater.setSharedVariable("table", false);
         }
 
         return map;
-    }
-
-    /**
-     * Задание переменных для шаблона
-     * @param table распечатывать ли таблицу элементов поля
-     * @param elements таблица элементов поля
-     * @param templater шаблонизатор
-     */
-    private void setSharedVariables(boolean table, Map<String, Integer> elements, PageGenerator templater) {
-        if (table) {
-            templater.setSharedVariable("table", true);
-            templater.setSharedVariable("elements", elements);
-        }
     }
 
     /**

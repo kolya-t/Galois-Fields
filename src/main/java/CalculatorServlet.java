@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class CalculatorServlet extends HttpServlet {
@@ -23,49 +25,74 @@ public class CalculatorServlet extends HttpServlet {
             return;
         }
 
-        Map<String, Object> calculatedMap = calculate(req);
         PageGenerator templater = PageGenerator.instance();
-        setSharedVariables(req, templater);
-
-        String json = new Gson().toJson(req.getParameterMap());
-        System.out.println(json);
-        resp.getWriter().println(json);
+        Map<String, Object> calculatedMap = calculate(req, templater);
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println(PageGenerator.instance().getPage("page.html", calculatedMap));
+        resp.getWriter().println(PageGenerator.instance().getPage("results.html", calculatedMap));
     }
 
     /**
      * Выполнение расчета
      * @param req
      */
-    private Map<String, Object> calculate(HttpServletRequest req) {
+    private Map<String, Object> calculate(HttpServletRequest req, PageGenerator templater) {
         Map<String, Object> map = new HashMap<>();
 
         int power = Integer.parseInt(req.getParameter("power"));
-        String polynom = req.getParameter("polynom");
+        String polynomial = req.getParameter("polynomial");
         String formula = req.getParameter("formula");
-        boolean table = false;
-        String table_first;
+
+        /* Добавление в словарь */
+        map.put("power", power);
+        map.put("bi_polynomial", polynomial);
+        map.put("formula", formula);
+
+
+        GF gf = new GF(power, polynomial);
+        map.put("polynomial", gf.toPolynomial(polynomial));
+        RPN rpn = new RPN(gf);
+        int res = rpn.calculate(formula);
+        String result = "e<sup>" + gf.log(res) + "</sup>";
+        String bi_result = gf.toBinaryString(res);
+
+        map.put("bi_result", bi_result);
+        map.put("result", result);
+
+        int table_first;
         int table_count;
         if (req.getParameter("table") != null) {
-            table = true;
-            table_first = req.getParameter("table_first");
+            table_first = Integer.parseInt(req.getParameter("table_first").replaceAll("[^0-9]", ""));
             table_count = Integer.parseInt(req.getParameter("table_count"));
-        }
 
-        GF gf = new GF(power, polynom);
-        RPN rpn = new RPN(gf);
+            /* Добавление в словарь */
+            map.put("table", true); // если не будет работать то убрать
+
+            Map<String, Integer> elements = new LinkedHashMap<>();
+            for (int i = table_first; i < gf.getFieldSize(); i++) {
+                String binary = gf.toBinaryString(gf.pow(i));
+                elements.put(binary, i);
+                if (i == table_first + table_count) {
+                    break;
+                }
+            }
+
+            setSharedVariables(true, elements, templater);
+        }
 
         return map;
     }
 
-    private void setSharedVariables(HttpServletRequest req, PageGenerator templater) {
-        String table = req.getParameter("table");
-        if (table != null) {
+    /**
+     * Задание переменных для шаблона
+     * @param table распечатывать ли таблицу элементов поля
+     * @param elements таблица элементов поля
+     * @param templater шаблонизатор
+     */
+    private void setSharedVariables(boolean table, Map<String, Integer> elements, PageGenerator templater) {
+        if (table) {
             templater.setSharedVariable("table", true);
-        } else {
-            return;
+            templater.setSharedVariable("elements", elements);
         }
     }
 

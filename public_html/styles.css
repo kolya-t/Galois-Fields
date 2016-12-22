@@ -23,12 +23,12 @@ div.wrapper {
     width: 90%;
 }
 
-table.els {
+table.elements {
     border-collapse: collapse;
     text-align: center;
 }
 
-table.els td, table.els th {
+table.elements td, table.elements th {
     border: 1px solid gray;
     padding: 5px;
 }

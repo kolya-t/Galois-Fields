@@ -166,4 +166,45 @@ public class GF {
     public int inverse(int n) {
         return Integer.parseInt(toBinaryString(n), 2);
     }
+
+    public String toPolynomial(String binary) {
+        /* TODO: проверки */
+
+        StringBuilder b = new StringBuilder();
+        char[] chars = binary.toCharArray();
+        int iMax = chars.length - 1;
+        for (int i = 0; i <= iMax; i++) {
+            // если встретилась единица
+            if (chars[iMax - i] == '1') {
+                switch (iMax - i) {
+                    // если одночлен x^0
+                    case '0':
+                        b.append('1');
+                        break;
+                    // если одночлен x^1
+                    case '1':
+                        b.append('x');
+                        break;
+                    // если степень одночлена > 1
+                    default:
+                        b.append("x<sup>").append(iMax - i).append("</sup>");
+                        break;
+                }
+
+                if (i != iMax) {
+                    b.append(" + ");
+                }
+            }
+            // если это последний одночлен этого полинома
+            if (i == iMax) {
+                String string = b.toString();
+                if (string.endsWith(" + ")) {
+                    string = string.substring(0, string.length() - 3);
+                }
+                return string;
+            }
+        }
+        return "nan";
+    }
+
 }

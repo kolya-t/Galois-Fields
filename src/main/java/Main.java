@@ -9,6 +9,7 @@ import org.eclipse.jetty.util.log.Log;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+
         // обработчик статичных страниц
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setResourceBase("public_html");

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Калькулятор полей Галуа</title>
-    <link href="../public_html/styles.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto"
           rel="stylesheet">
 </head>
@@ -15,25 +15,24 @@
         <hr>
         <hr>
         <b><i>Вычисление формулы:</i></b>
-        ${formula} = ${bi_result} = e<sup>${result}</sup>
+        ${formula} = ${bi_result} = ${result}
         <hr>
-        <#list elements>
+
+        <#list elements?keys>
             <b><i>Элементы поля:</i></b>
-            <table class="els">
+            <table class="elements">
                 <tr>
                     <th>Двоичное представление</th>
                     <th>Степенное представление</th>
                 </tr>
-                <#items as element>
+                <#items as k>
                     <tr>
-                        <td>${element}</td>
-                        <td>e<sup>${element}</sup></td>
+                        <td>${k}</td>
+                        <td>e<sup>${elements[k]}</sup></td>
                     </tr>
                 </#items>
             </table>
             <hr>
-            <!--<#else>-->
-            <!---->
         </#list>
     </div>
 </div>

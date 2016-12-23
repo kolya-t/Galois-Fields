@@ -175,8 +175,8 @@ public class GF {
         int iMax = chars.length - 1;
         for (int i = 0; i <= iMax; i++) {
             // если встретилась единица
-            if (chars[iMax - i] == '1') {
-                switch (iMax - i) {
+            if (chars[i] == '1') {
+                switch (i) {
                     // если одночлен x^0
                     case '0':
                         b.append('1');

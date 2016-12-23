@@ -69,7 +69,7 @@ public class CalculatorServlet extends HttpServlet {
             for (int i = table_first; i < gf.getFieldSize(); i++) {
                 String binary = gf.toBinaryString(gf.pow(i));
                 elements.put(binary, i);
-                if (i == table_first + table_count) {
+                if (i == table_first + table_count - 1) {
                     break;
                 }
             }

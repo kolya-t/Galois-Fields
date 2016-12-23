@@ -66,12 +66,9 @@ public class CalculatorServlet extends HttpServlet {
 //            map.put("tbl", true); // если не будет работать то убрать
 
             Map<String, Integer> elements = new LinkedHashMap<>();
-            for (int i = table_first; i < gf.getFieldSize(); i++) {
+            for (int i = table_first; i < gf.getPeriod() && i < table_first + table_count; i++) {
                 String binary = gf.toBinaryString(gf.pow(i));
                 elements.put(binary, i);
-                if (i == table_first + table_count - 1) {
-                    break;
-                }
             }
             templater.setSharedVariable("elements", elements);
             templater.setSharedVariable("table", true);
